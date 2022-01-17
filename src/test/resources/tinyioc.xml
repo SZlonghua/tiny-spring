@@ -25,4 +25,8 @@
         <property name="expression" value="execution(* us.codecraft.tinyioc.*.*(..))"></property>
     </bean>
 
+
+    <bean id="hi" class="us.codecraft.tinyioc.He"></bean>
+
+    <bean id="aspectj" class="us.codecraft.tinyioc.aop.LogTrackAspect"></bean>
 </beans>

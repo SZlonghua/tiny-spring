@@ -30,7 +30,7 @@ public abstract class AbstractBeanFactory implements BeanFactory {
 		if (bean == null) {
 			bean = doCreateBean(beanDefinition);
             bean = initializeBean(bean, name);
-            beanDefinition.setBean(bean);
+			beanDefinition.setBean(bean);
 		}
 		return bean;
 	}
@@ -86,6 +86,24 @@ public abstract class AbstractBeanFactory implements BeanFactory {
 			}
 		}
 		return beans;
+	}
+
+	public String[] getBeanNamesForType(Class<?> type) {
+		return beanDefinitionNames.toArray(new String[beanDefinitionNames.size()]);
+	}
+
+	@Override
+	public Class<?> getType(String name) {
+
+		BeanDefinition beanDefinition = beanDefinitionMap.get(name);
+		return beanDefinition.getBeanClass();
+		/*Object bean = null;
+		try {
+			bean = getBean(name);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return bean.getClass();*/
 	}
 
 }

@@ -1,6 +1,7 @@
 package us.codecraft.tinyioc.aop;
 
 import org.junit.Test;
+import us.codecraft.tinyioc.He;
 import us.codecraft.tinyioc.HelloWorldService;
 import us.codecraft.tinyioc.HelloWorldServiceImpl;
 import us.codecraft.tinyioc.context.ApplicationContext;
@@ -35,6 +36,34 @@ public class Cglib2AopProxyTest {
 
 		// 4. 基于AOP的调用
 		helloWorldServiceProxy.helloWorld();
+
+	}
+
+
+	@Test
+	public void testInterceptor1() throws Exception {
+		// --------- helloWorldService without AOP
+		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("tinyioc.xml");
+		He helloWorldService = (He) applicationContext.getBean("hi");
+		helloWorldService.hi();
+
+		// --------- helloWorldService with AOP
+		// 1. 设置被代理对象(Joinpoint)
+		ProxyFactory advisedSupport = new ProxyFactory();
+		TargetSource targetSource = new TargetSource(helloWorldService, He.class,
+				He.class.getInterfaces());
+		advisedSupport.setTargetSource(targetSource);
+
+		// 2. 设置拦截器(Advice)
+		TimerInterceptor timerInterceptor = new TimerInterceptor();
+		advisedSupport.setMethodInterceptor(timerInterceptor);
+
+		// 3. 创建代理(Proxy)
+		Cglib2AopProxy cglib2AopProxy = new Cglib2AopProxy(advisedSupport);
+		He helloWorldServiceProxy = (He) cglib2AopProxy.getProxy();
+
+		// 4. 基于AOP的调用
+		helloWorldServiceProxy.hi();
 
 	}
 }

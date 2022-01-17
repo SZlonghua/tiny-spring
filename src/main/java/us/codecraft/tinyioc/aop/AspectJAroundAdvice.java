@@ -5,12 +5,13 @@ import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import us.codecraft.tinyioc.beans.factory.BeanFactory;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 
 /**
  * @author yihua.huang@dianping.com
  */
-public class AspectJAroundAdvice implements Advice, MethodInterceptor {
+public class AspectJAroundAdvice extends AbstractAspectJAdvice implements Serializable, MethodInterceptor, Ordered {
 
 	private BeanFactory beanFactory;
 
@@ -18,8 +19,13 @@ public class AspectJAroundAdvice implements Advice, MethodInterceptor {
 
 	private String aspectInstanceName;
 
-	@Override
+    public AspectJAroundAdvice(Method aspectJAdviceMethod, AspectJExpressionPointcut pointcut, AspectInstanceFactory aspectInstanceFactory) {
+        super(aspectJAdviceMethod, pointcut, aspectInstanceFactory);
+    }
+
+    @Override
 	public Object invoke(MethodInvocation invocation) throws Throwable {
+        System.out.println("---------------AspectJAroundAdvice");
         return aspectJAdviceMethod.invoke(beanFactory.getBean(aspectInstanceName), invocation);
 	}
 
@@ -45,5 +51,20 @@ public class AspectJAroundAdvice implements Advice, MethodInterceptor {
 
     public void setAspectInstanceName(String aspectInstanceName) {
         this.aspectInstanceName = aspectInstanceName;
+    }
+
+    @Override
+    public boolean isBeforeAdvice() {
+        return false;
+    }
+
+    @Override
+    public boolean isAfterAdvice() {
+        return false;
+    }
+
+    @Override
+    public int getOrder() {
+        return 100;
     }
 }

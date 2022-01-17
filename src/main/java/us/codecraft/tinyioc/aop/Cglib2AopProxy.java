@@ -40,9 +40,9 @@ public class Cglib2AopProxy extends AbstractAopProxy {
 		public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
 			if (advised.getMethodMatcher() == null
 					|| advised.getMethodMatcher().matches(method, advised.getTargetSource().getTargetClass())) {
-				return delegateMethodInterceptor.invoke(new CglibMethodInvocation(advised.getTargetSource().getTarget(), method, args, proxy));
+				return delegateMethodInterceptor.invoke(new CglibMethodInvocation(advised.getTargetSource().getTarget(), method, args, proxy,advised));
 			}
-			return new CglibMethodInvocation(advised.getTargetSource().getTarget(), method, args, proxy).proceed();
+			return new CglibMethodInvocation(advised.getTargetSource().getTarget(), method, args, proxy,advised).proceed();
 		}
 	}
 
@@ -50,8 +50,8 @@ public class Cglib2AopProxy extends AbstractAopProxy {
 
 		private final MethodProxy methodProxy;
 
-		public CglibMethodInvocation(Object target, Method method, Object[] args, MethodProxy methodProxy) {
-			super(target, method, args);
+		public CglibMethodInvocation(Object target, Method method, Object[] args, MethodProxy methodProxy,AdvisedSupport advised) {
+			super(target,target, method, args,advised.getTargetSource().getTargetClass(),advised.getInterceptorsAndDynamicInterceptionAdvice(method,advised.getTargetSource().getTargetClass()));
 			this.methodProxy = methodProxy;
 		}
 
