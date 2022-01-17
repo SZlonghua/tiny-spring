@@ -13,10 +13,3 @@ tiny-spring
 2. 可从xml中读取配置。
 3. 可以使用Aspectj的方式进行AOP编写，支持接口和类代理。
 
-## 使用
-
-`tiny-spring`是逐步进行构建的，里程碑版本我都使用了git tag来管理。例如，最开始的tag是`step-1-container-register-and-get`，那么可以使用
-
-	git checkout step-1-container-register-and-get
-	
-来获得这一版本。版本历史见[`changelog.md`](https://github.com/code4craft/tiny-spring/blob/master/changelog.md)。
